@@ -11,14 +11,11 @@ import walledin.engine.TexturePartManager;
 import walledin.game.Background;
 import walledin.game.Item;
 import walledin.game.Player;
-import walledin.game.entity.behaviors.BackgroundRenderBehavior;
 import walledin.game.entity.behaviors.HealthBehavior;
 import walledin.game.entity.behaviors.HealthKitBehavior;
 import walledin.game.entity.behaviors.ItemRenderBehavior;
 import walledin.game.entity.behaviors.MapRenderBehavior;
-import walledin.game.entity.behaviors.PlayerAnimationBehavior;
 import walledin.game.entity.behaviors.PlayerControlBehaviour;
-import walledin.game.entity.behaviors.PlayerRenderBehavior;
 import walledin.game.entity.behaviors.SpatialBehavior;
 import walledin.game.map.GameMap;
 import walledin.game.map.Tile;
@@ -44,8 +41,6 @@ public class ServerEntityFactory implements EntityFactory {
 
 		player.addBehavior(new HealthBehavior(player, 100, 100));
 		player.addBehavior(new PlayerControlBehaviour(player));
-		player.addBehavior(new PlayerRenderBehavior(player));
-		player.addBehavior(new PlayerAnimationBehavior(player));
 
 		// FIXME correct the drawing instead of the hack the bounding box
 		player.setAttribute(Attribute.BOUNDING_RECT,
@@ -56,7 +51,6 @@ public class ServerEntityFactory implements EntityFactory {
 
 	public Background createBackground(final String name) {
 		final Background background = new Background(name);
-		background.addBehavior(new BackgroundRenderBehavior(background));
 		return background;
 	}
 
@@ -82,11 +76,9 @@ public class ServerEntityFactory implements EntityFactory {
 		return item;
 	}
 
-	private Item createItemInternal(final String name, final String familyName,
-			final String texPart, final Rectangle destRect) {
+	private Item createItemInternal(final String name, final String familyName, final Rectangle destRect) {
 		final Item item = new Item(name, familyName);
 		item.addBehavior(new SpatialBehavior(item));
-		item.addBehavior(new ItemRenderBehavior(item, texPart, destRect));
 
 		item.setAttribute(Attribute.BOUNDING_RECT, destRect);
 		return item;
@@ -114,8 +106,6 @@ public class ServerEntityFactory implements EntityFactory {
 		map.setAttribute(Attribute.TILES, tiles);
 		map.setAttribute(Attribute.ITEM_LIST, items);
 
-		map.addBehavior(new MapRenderBehavior(map, width, height, tiles));
-
 		return map;
 	}
 
@@ -136,8 +126,7 @@ public class ServerEntityFactory implements EntityFactory {
 	 *            Element in XML file which contains item specific information,
 	 *            like health kit strength or armor penetration value
 	 */
-	private void addFunction(final String familyName, final String texPart,
-			final Rectangle destRect, final Element el) {
+	private void addFunction(final String familyName, final Rectangle destRect, final Element el) {
 		if (familyName.equals("healthkit")) {
 			itemContructionFunctions.put(familyName,
 					new ItemConstructionFunction() {
@@ -145,7 +134,7 @@ public class ServerEntityFactory implements EntityFactory {
 						@Override
 						public Item create(final String itemName) {
 							final Item hk = createItemInternal(itemName,
-									familyName, texPart, destRect);
+									familyName, destRect);
 
 							// read extra data
 							final int hkStrength = XMLReader.getIntValue(el,
@@ -166,7 +155,7 @@ public class ServerEntityFactory implements EntityFactory {
 						public Item create(final String itemName) {
 							// TODO: read custom information
 							return createItemInternal(itemName, familyName,
-									texPart, destRect);
+									destRect);
 						}
 					});
 		}
@@ -197,19 +186,7 @@ public class ServerEntityFactory implements EntityFactory {
 				final int destWidth = XMLReader.getIntValue(cur, "width");
 				final int destHeight = XMLReader.getIntValue(cur, "height");
 
-				final Element texurePart = XMLReader.getFirstElement(cur,
-						"texpart");
-				final String texPartName = XMLReader.getTextValue(texurePart,
-						"name");
-				final int x = XMLReader.getIntValue(texurePart, "x");
-				final int y = XMLReader.getIntValue(texurePart, "y");
-				final int width = XMLReader.getIntValue(texurePart, "width");
-				final int height = XMLReader.getIntValue(texurePart, "height");
-
-				TexturePartManager.getInstance().createTexturePart(texPartName,
-						texName, new Rectangle(x, y, width, height));
-
-				addFunction(familyName, texPartName, new Rectangle(0, 0,
+				addFunction(familyName, new Rectangle(0, 0,
 						destWidth, destHeight), cur);
 			}
 

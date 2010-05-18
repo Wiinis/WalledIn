@@ -12,14 +12,10 @@ import walledin.game.Background;
 import walledin.game.Item;
 import walledin.game.Player;
 import walledin.game.entity.behaviors.BackgroundRenderBehavior;
-import walledin.game.entity.behaviors.HealthBehavior;
-import walledin.game.entity.behaviors.HealthKitBehavior;
 import walledin.game.entity.behaviors.ItemRenderBehavior;
 import walledin.game.entity.behaviors.MapRenderBehavior;
 import walledin.game.entity.behaviors.PlayerAnimationBehavior;
-import walledin.game.entity.behaviors.PlayerControlBehaviour;
 import walledin.game.entity.behaviors.PlayerRenderBehavior;
-import walledin.game.entity.behaviors.SpatialBehavior;
 import walledin.game.map.GameMap;
 import walledin.game.map.Tile;
 import walledin.math.Rectangle;
@@ -38,18 +34,9 @@ public class ClientEntityFactory implements EntityFactory {
 
 	public Player createPlayer(final String name) {
 		final Player player = new Player(name);
-
-		player.setAttribute(Attribute.ORIENTATION, 1); // start looking to
-		// the right
-
-		player.addBehavior(new HealthBehavior(player, 100, 100));
-		player.addBehavior(new PlayerControlBehaviour(player));
+		
 		player.addBehavior(new PlayerRenderBehavior(player));
 		player.addBehavior(new PlayerAnimationBehavior(player));
-
-		// FIXME correct the drawing instead of the hack the bounding box
-		player.setAttribute(Attribute.BOUNDING_RECT,
-				new Rectangle(0, 0, 44, 43));
 
 		return player;
 	}
@@ -85,10 +72,7 @@ public class ClientEntityFactory implements EntityFactory {
 	private Item createItemInternal(final String name, final String familyName,
 			final String texPart, final Rectangle destRect) {
 		final Item item = new Item(name, familyName);
-		item.addBehavior(new SpatialBehavior(item));
 		item.addBehavior(new ItemRenderBehavior(item, texPart, destRect));
-
-		item.setAttribute(Attribute.BOUNDING_RECT, destRect);
 		return item;
 	}
 
@@ -146,13 +130,6 @@ public class ClientEntityFactory implements EntityFactory {
 						public Item create(final String itemName) {
 							final Item hk = createItemInternal(itemName,
 									familyName, texPart, destRect);
-
-							// read extra data
-							final int hkStrength = XMLReader.getIntValue(el,
-									"strength");
-							hk
-									.addBehavior(new HealthKitBehavior(hk,
-											hkStrength));
 							return hk;
 						}
 					});
