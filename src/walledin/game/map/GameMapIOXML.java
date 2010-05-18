@@ -6,8 +6,8 @@ import java.util.List;
 import org.w3c.dom.Element;
 
 import walledin.game.Item;
-import walledin.game.ItemFactory;
 import walledin.game.entity.Attribute;
+import walledin.game.entity.EntityFactory;
 import walledin.math.Vector2f;
 import walledin.util.XMLReader;
 
@@ -20,6 +20,11 @@ public class GameMapIOXML implements GameMapIO {
 	// FIXME dont use instance vars for this...
 	private int width;
 	private int height;
+	private final EntityFactory entityFactory;
+	
+	public GameMapIOXML(EntityFactory entityFactory) {
+		this.entityFactory = entityFactory;
+	}
 
 	/**
 	 * Reads tile information
@@ -65,7 +70,7 @@ public class GameMapIOXML implements GameMapIO {
 			final int x = Integer.parseInt(el.getAttribute("x"));
 			final int y = Integer.parseInt(el.getAttribute("y"));
 
-			final Item item = ItemFactory.getInstance().create(type, name);
+			final Item item = entityFactory.createItem(type, name);
 			item.setAttribute(Attribute.POSITION, new Vector2f(x, y));
 			itList.add(item);
 		}
@@ -91,7 +96,7 @@ public class GameMapIOXML implements GameMapIO {
 			final List<Item> items = parseItems(map);
 			final List<Tile> tiles = parseTiles(map);
 
-			final GameMap m = new GameMap(name, width, height, tiles, items);
+			final GameMap m = entityFactory.createGameMap(name, width, height, tiles, items);
 
 			return m;
 		} else {

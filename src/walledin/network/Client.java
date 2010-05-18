@@ -14,7 +14,6 @@ import walledin.game.Background;
 import walledin.game.CollisionManager;
 import walledin.game.DrawOrderManager;
 import walledin.game.Item;
-import walledin.game.ItemFactory;
 import walledin.game.Player;
 import walledin.game.entity.Attribute;
 import walledin.game.entity.Entity;
