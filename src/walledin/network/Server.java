@@ -14,10 +14,10 @@ import java.util.Set;
 
 import walledin.game.CollisionManager;
 import walledin.game.Item;
-import walledin.game.ItemFactory;
 import walledin.game.Player;
 import walledin.game.entity.Attribute;
 import walledin.game.entity.Entity;
+import walledin.game.entity.ServerEntityFactory;
 import walledin.game.map.GameMap;
 import walledin.game.map.GameMapIO;
 import walledin.game.map.GameMapIOXML;
@@ -35,12 +35,14 @@ public class Server {
 	private Map<String, Entity> entities;
 	private boolean running;
 	private ByteBuffer buffer;
+	private ServerEntityFactory entityFactory;
 
 	public Server() {
 		entities = new LinkedHashMap<String, Entity>();
 		players = new HashMap<SocketAddress, Player>();
 		running = false;
 		buffer = ByteBuffer.allocate(BUFFER_SIZE);
+		entityFactory = new ServerEntityFactory();
 	}
 
 	public void run() throws IOException {
@@ -138,9 +140,9 @@ public class Server {
 		entities = new LinkedHashMap<String, Entity>();
 
 		// load all item information
-		ItemFactory.getInstance().loadFromXML("data/items.xml");
+		entityFactory.loadItemsFromXML("data/items.xml");
 
-		final GameMapIO mMapIO = new GameMapIOXML(); // choose XML as format
+		final GameMapIO mMapIO = new GameMapIOXML(entityFactory); // choose XML as format
 
 		entities.put("Map", mMapIO.readFromFile("data/map.xml"));
 

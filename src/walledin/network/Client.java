@@ -16,6 +16,7 @@ import walledin.game.DrawOrderManager;
 import walledin.game.Item;
 import walledin.game.Player;
 import walledin.game.entity.Attribute;
+import walledin.game.entity.ClientEntityFactory;
 import walledin.game.entity.Entity;
 import walledin.game.map.GameMap;
 import walledin.game.map.GameMapIO;
@@ -29,9 +30,11 @@ public class Client {
 	private Map<String, Entity> entities;
 	private DrawOrderManager drawOrder;
 	private Font font;
+	private ClientEntityFactory entityFactory;
 
 	public Client() {
 		entities = new LinkedHashMap<String, Entity>();
+		entityFactory = new ClientEntityFactory();
 	}
 
 	public void update(final double delta) {
@@ -84,9 +87,9 @@ public class Client {
 		font.readFromFile("data/arial20.font");
 
 		// load all item information
-		ItemFactory.getInstance().loadFromXML("data/items.xml");
+		entityFactory.loadItemsFromXML("data/items.xml");
 
-		final GameMapIO mMapIO = new GameMapIOXML(); // choose XML as format
+		final GameMapIO mMapIO = new GameMapIOXML(entityFactory); // choose XML as format
 
 		entities.put("Map", mMapIO.readFromFile("data/map.xml"));
 		entities.put("Background", new Background("Background"));

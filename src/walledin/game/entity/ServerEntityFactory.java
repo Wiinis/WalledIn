@@ -25,8 +25,8 @@ import walledin.game.map.Tile;
 import walledin.math.Rectangle;
 import walledin.util.XMLReader;
 
-public class ClientEntityFactory implements EntityFactory {
-	public ClientEntityFactory() {
+public class ServerEntityFactory implements EntityFactory {
+	public ServerEntityFactory() {
 		itemContructionFunctions = new HashMap<String, ItemConstructionFunction>();
 	}
 
