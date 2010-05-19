@@ -1,12 +1,14 @@
 package walledin.network;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import walledin.engine.Font;
 import walledin.engine.Input;
+import walledin.engine.RenderListener;
 import walledin.engine.Renderer;
 import walledin.engine.TextureManager;
 import walledin.engine.TexturePartManager;
@@ -24,7 +26,7 @@ import walledin.game.map.GameMapIOXML;
 import walledin.math.Rectangle;
 import walledin.math.Vector2f;
 
-public class Client {
+public class Client implements RenderListener {
 	private static final int TILE_SIZE = 64;
 	private static final int TILES_PER_LINE = 16;
 	private Map<String, Entity> entities;
@@ -36,25 +38,47 @@ public class Client {
 		entities = new LinkedHashMap<String, Entity>();
 		entityFactory = new ClientEntityFactory();
 	}
-
+	
+	@Override
 	public void update(final double delta) {
 		/* Update all entities */
 		for (final Entity entity : entities.values()) {
 			entity.sendUpdate(delta);
 		}
-
+		
+		/* Spawn bullets if key pressed */
+		if (Input.getInstance().keyDown(KeyEvent.VK_ENTER))
+		{
+			Entity player = entities.get("Player01");
+			Vector2f playerPosition = player.getAttribute(Attribute.POSITION);
+			int or = player.getAttribute(Attribute.ORIENTATION);
+			Vector2f position = playerPosition.add(new Vector2f(or * 50.0f,
+					20.0f));
+			Vector2f velocity = new Vector2f(or * 40.0f, 0);
+			Item bullet = entityFactory.createItem("bullet", "bl0",
+					position, velocity);
+			// bullet does not move?
+			
+			entities.put(bullet.getName(), bullet);
+			drawOrder.add(bullet);
+		}
+		
 		/* Do collision detection */
 		CollisionManager.calculateMapCollisions((GameMap) entities.get("Map"),
 				entities.values(), delta);
 		CollisionManager.calculateEntityCollisions(entities.values(), delta);
 
-		for (final Entity entity : entities.values()) {
-			if (entity.isMarkedRemoved()) {
-				removeEntity(entity.getName());
-			}
-		}
+		/* Clean up entities which are flagged for removal */
+		List<Entity> removeList = new ArrayList<Entity>();
+		for (final Entity entity : entities.values())
+			if (entity.isMarkedRemoved())
+				removeList.add(entity);
+		
+		for (int i = 0; i < removeList.size(); i++)
+			removeEntity(removeList.get(i).getName());
 	}
-
+	
+	@Override
 	public void draw(final Renderer renderer) {
 		drawOrder.draw(renderer); // draw all entities in correct order
 
@@ -76,6 +100,7 @@ public class Client {
 	/**
 	 * Initialize game
 	 */
+	@Override
 	public void init() {
 		entities = new LinkedHashMap<String, Entity>();
 		drawOrder = new DrawOrderManager();
@@ -92,10 +117,9 @@ public class Client {
 		final GameMapIO mMapIO = new GameMapIOXML(entityFactory); // choose XML as format
 
 		entities.put("Map", mMapIO.readFromFile("data/map.xml"));
-		entities.put("Background", new Background("Background"));
-		entities.put("Player01", new Player("Player01"));
-		entities.get("Player01").setAttribute(Attribute.POSITION,
-				new Vector2f(400, 300));
+		//entities.put("Background", new Background("Background"));
+		//entities.put("Player01", new Player("Player01", new Vector2f(400, 300),
+		//		new Vector2f(0, 0)));
 
 		// add map items like healthkits to entity list
 		final List<Item> mapItems = entities.get("Map").getAttribute(
@@ -136,7 +160,7 @@ public class Client {
 				32, 96, 32));
 		manager.createTexturePart("sun", "sun", new Rectangle(0, 0, 128, 128));
 		manager.createTexturePart("tile_empty", "tiles",
-				createMapTextureRectangle(0, TILES_PER_LINE, TILE_SIZE,
+				createMapTextureRectangle(6, TILES_PER_LINE, TILE_SIZE,
 						TILE_SIZE));
 		manager.createTexturePart("tile_filled", "tiles",
 				createMapTextureRectangle(1, TILES_PER_LINE, TILE_SIZE,

@@ -19,6 +19,7 @@ import walledin.game.entity.behaviors.PlayerRenderBehavior;
 import walledin.game.map.GameMap;
 import walledin.game.map.Tile;
 import walledin.math.Rectangle;
+import walledin.math.Vector2f;
 import walledin.util.XMLReader;
 
 public class ClientEntityFactory implements EntityFactory {
@@ -56,7 +57,9 @@ public class ClientEntityFactory implements EntityFactory {
 	 *            The name of the item to be created
 	 * @return Returns an item or null on failure
 	 */
-	public Item createItem(final String familyName, final String itemName) {
+	@Override
+	public Item createItem(final String familyName, final String itemName,
+			final Vector2f position, final Vector2f velocity) {
 		if (!itemContructionFunctions.containsKey(familyName)) {
 			throw new IllegalArgumentException(
 					"Item "
@@ -64,6 +67,7 @@ public class ClientEntityFactory implements EntityFactory {
 							+ " is not found in the database. Are the items loaded correctly?");
 		}
 
+		// do something with pos and vel?
 		final Item item = itemContructionFunctions.get(familyName).create(
 				itemName);
 		return item;
@@ -122,31 +126,15 @@ public class ClientEntityFactory implements EntityFactory {
 	 */
 	private void addFunction(final String familyName, final String texPart,
 			final Rectangle destRect, final Element el) {
-		if (familyName.equals("healthkit")) {
-			itemContructionFunctions.put(familyName,
-					new ItemConstructionFunction() {
+		itemContructionFunctions.put(familyName,
+				new ItemConstructionFunction() {
 
-						@Override
-						public Item create(final String itemName) {
-							final Item hk = createItemInternal(itemName,
-									familyName, texPart, destRect);
-							return hk;
-						}
-					});
-		}
-
-		if (familyName.equals("armourkit")) {
-			itemContructionFunctions.put(familyName,
-					new ItemConstructionFunction() {
-
-						@Override
-						public Item create(final String itemName) {
-							// TODO: read custom information
-							return createItemInternal(itemName, familyName,
-									texPart, destRect);
-						}
-					});
-		}
+					@Override
+					public Item create(final String itemName) {
+						return createItemInternal(itemName, familyName,
+								texPart, destRect);
+					}
+				});
 	}
 
 	/**
