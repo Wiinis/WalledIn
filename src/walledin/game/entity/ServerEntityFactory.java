@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.w3c.dom.Element;
 
-import walledin.engine.TextureManager;
 import walledin.game.Background;
 import walledin.game.Item;
 import walledin.game.Player;
@@ -32,7 +31,8 @@ public class ServerEntityFactory implements EntityFactory {
 	Map<String, ItemConstructionFunction> itemContructionFunctions;
 
 	@Override
-	public Player createPlayer(final String name, final Vector2f position, final Vector2f velocity) {
+	public Player createPlayer(final String name, final Vector2f position,
+			final Vector2f velocity) {
 		final Player player = new Player(name);
 
 		player.setAttribute(Attribute.ORIENTATION, 1); // start looking to
@@ -40,7 +40,7 @@ public class ServerEntityFactory implements EntityFactory {
 
 		player.addBehavior(new HealthBehavior(player, 100, 100));
 		player.addBehavior(new SpatialBehavior(player, position, velocity));
-		
+
 		// FIXME correct the drawing instead of the hack the bounding box
 		player.setAttribute(Attribute.BOUNDING_RECT,
 				new Rectangle(0, 0, 44, 43));
@@ -110,6 +110,10 @@ public class ServerEntityFactory implements EntityFactory {
 		map.setAttribute(Attribute.TILES, tiles);
 		map.setAttribute(Attribute.ITEM_LIST, items);
 
+		// TODO needed for col detection ... but maybe should be handled
+		// differently
+		map.setAttribute(Attribute.RENDER_TILE_SIZE, 32f);
+
 		return map;
 	}
 
@@ -130,7 +134,8 @@ public class ServerEntityFactory implements EntityFactory {
 	 *            Element in XML file which contains item specific information,
 	 *            like health kit strength or armor penetration value
 	 */
-	private void addFunction(final String familyName, final Rectangle destRect, final Element el) {
+	private void addFunction(final String familyName, final Rectangle destRect,
+			final Element el) {
 		if (familyName.equals("healthkit")) {
 			itemContructionFunctions.put(familyName,
 					new ItemConstructionFunction() {
@@ -157,14 +162,15 @@ public class ServerEntityFactory implements EntityFactory {
 					new ItemConstructionFunction() {
 
 						@Override
-						public Item create(final String itemName, final Vector2f position, final Vector2f velocity) {
+						public Item create(final String itemName,
+								final Vector2f position, final Vector2f velocity) {
 							// TODO: read custom information
 							return createItemInternal(itemName, familyName,
 									destRect, position, velocity);
 						}
 					});
 		}
-		
+
 		if (familyName.equals("bullet")) {
 			itemContructionFunctions.put("bullet",
 					new ItemConstructionFunction() {
@@ -196,19 +202,13 @@ public class ServerEntityFactory implements EntityFactory {
 			final List<Element> elList = XMLReader.getElements(reader
 					.getRootElement(), "item");
 
-			final String texture = reader.getRootElement().getAttribute(
-					"texture");
-			final String texName = reader.getRootElement().getAttribute(
-					"texname");
-			TextureManager.getInstance().loadFromFile(texture, texName);
-
 			for (final Element cur : elList) {
 				final String familyName = XMLReader.getTextValue(cur, "name");
 				final int destWidth = XMLReader.getIntValue(cur, "width");
 				final int destHeight = XMLReader.getIntValue(cur, "height");
 
-				addFunction(familyName, new Rectangle(0, 0,
-						destWidth, destHeight), cur);
+				addFunction(familyName, new Rectangle(0, 0, destWidth,
+						destHeight), cur);
 			}
 
 		}

@@ -6,7 +6,6 @@ import java.util.List;
 import org.w3c.dom.Element;
 
 import walledin.game.Item;
-import walledin.game.entity.Attribute;
 import walledin.game.entity.EntityFactory;
 import walledin.math.Vector2f;
 import walledin.util.XMLReader;
