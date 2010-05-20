@@ -54,13 +54,15 @@ public class Client implements RenderListener {
 			int or = player.getAttribute(Attribute.ORIENTATION);
 			Vector2f position = playerPosition.add(new Vector2f(or * 50.0f,
 					20.0f));
-			Vector2f velocity = new Vector2f(or * 40.0f, 0);
+			Vector2f velocity = new Vector2f(or * 400.0f, 0);
 			Item bullet = entityFactory.createItem("bullet", "bl0",
 					position, velocity);
 			// bullet does not move?
 			
 			entities.put(bullet.getName(), bullet);
 			drawOrder.add(bullet);
+			
+			Input.getInstance().setKeyUp(KeyEvent.VK_ENTER);
 		}
 		
 		/* Do collision detection */
