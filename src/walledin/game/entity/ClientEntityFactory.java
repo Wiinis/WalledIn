@@ -33,7 +33,9 @@ public class ClientEntityFactory implements EntityFactory {
 
 	Map<String, ItemConstructionFunction> itemContructionFunctions;
 
-	public Player createPlayer(final String name) {
+	public Player createPlayer(final String name, final Vector2f position,
+			final Vector2f velocity) {
+		// we dont use position and velocity in client.. they are set by the network code
 		final Player player = new Player(name);
 		
 		player.addBehavior(new PlayerRenderBehavior(player));

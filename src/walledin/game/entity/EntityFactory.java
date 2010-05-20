@@ -18,5 +18,6 @@ public interface EntityFactory {
 	Item createItem(final String familyName, final String itemName,
 			final Vector2f position, final Vector2f velocity);
 
-	Player createPlayer(final String name);
+	Player createPlayer(final String name, final Vector2f position,
+			final Vector2f velocity);
 }

@@ -33,6 +33,7 @@ public class Server {
 	private Map<SocketAddress, Player> players;
 	private Map<Player, Set<Integer>> keysDown;
 	private Map<String, Entity> entities;
+	private Set<Player> newPlayers;
 	private boolean running;
 	private ByteBuffer buffer;
 	private ServerEntityFactory entityFactory;
@@ -104,14 +105,14 @@ public class Server {
 
 	private void removePlayer(SocketAddress address) {
 		Player player = players.get(address);
+		newPlayers.remove(player);
 		entities.remove(player.getName());
 	}
 
 	private void createPlayer(String name, SocketAddress address) {
-		Player player = new Player(name);
+		Player player = entityFactory.createPlayer(name, new Vector2f(400, 300), new Vector2f());
 		entities.put(name, player);
-		player.setAttribute(Attribute.POSITION,
-				new Vector2f(400, 300));
+		newPlayers.add(player);
 		players.put(address, player);
 	}
 

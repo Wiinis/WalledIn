@@ -32,14 +32,14 @@ public class ServerEntityFactory implements EntityFactory {
 	Map<String, ItemConstructionFunction> itemContructionFunctions;
 
 	@Override
-	public Player createPlayer(final String name) {
+	public Player createPlayer(final String name, final Vector2f position, final Vector2f velocity) {
 		final Player player = new Player(name);
 
 		player.setAttribute(Attribute.ORIENTATION, 1); // start looking to
 		// the right
 
 		player.addBehavior(new HealthBehavior(player, 100, 100));
-		// TODO should be not have spatial behavior ... client server mixup?
+		player.addBehavior(new SpatialBehavior(player, position, velocity));
 		
 		// FIXME correct the drawing instead of the hack the bounding box
 		player.setAttribute(Attribute.BOUNDING_RECT,
