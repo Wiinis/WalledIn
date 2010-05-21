@@ -20,7 +20,7 @@ public class Entity {
 	 * @param name
 	 *            Name of the component
 	 */
-	public Entity(final String name, final String familyName) {
+	public Entity(final String familyName, final String name) {
 		behaviors = new HashMap<Class<? extends Behavior>, Behavior>();
 		attributes = new HashMap<Attribute, Object>();
 		changedAttributes = new HashSet<Attribute>();
@@ -126,7 +126,7 @@ public class Entity {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T setAttribute(final Attribute attribute, final T newObject) {
-		if (attribute.clazz.isInstance(newObject)) {
+		if (attribute.clazz.isInstance(newObject) || newObject == null) {
 			if (newObject == null) {
 				LOG.warning("Storing null value for attribute " + attribute
 						+ " of entity " + name);

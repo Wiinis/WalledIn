@@ -8,15 +8,12 @@ import org.w3c.dom.Element;
 
 import walledin.engine.TextureManager;
 import walledin.engine.TexturePartManager;
-import walledin.game.Background;
 import walledin.game.Item;
-import walledin.game.Player;
 import walledin.game.entity.behaviors.BackgroundRenderBehavior;
 import walledin.game.entity.behaviors.ItemRenderBehavior;
 import walledin.game.entity.behaviors.MapRenderBehavior;
 import walledin.game.entity.behaviors.PlayerAnimationBehavior;
 import walledin.game.entity.behaviors.PlayerRenderBehavior;
-import walledin.game.map.GameMap;
 import walledin.game.map.Tile;
 import walledin.math.Rectangle;
 import walledin.math.Vector2f;

@@ -6,7 +6,6 @@ import java.util.List;
 import walledin.game.entity.Attribute;
 import walledin.game.entity.Entity;
 import walledin.game.entity.MessageType;
-import walledin.game.map.GameMap;
 import walledin.game.map.Tile;
 import walledin.math.Circle;
 import walledin.math.Rectangle;
@@ -59,7 +58,7 @@ public class CollisionManager {
 
 	}
 
-	static private Tile tileFromPixel(final GameMap map, final Vector2f pos) {
+	static private Tile tileFromPixel(final Entity map, final Vector2f pos) {
 		final float tileSize = map.getAttribute(Attribute.RENDER_TILE_SIZE);
 		final int width = map.getAttribute(Attribute.WIDTH);
 
@@ -123,7 +122,7 @@ public class CollisionManager {
 		}
 	}
 
-	static public void calculateMapCollisions(final GameMap map,
+	static public void calculateMapCollisions(final Entity map,
 			final Collection<Entity> entities, final double delta) {
 		final float tileSize = map.getAttribute(Attribute.RENDER_TILE_SIZE);
 

@@ -6,14 +6,11 @@ import java.util.Map;
 
 import org.w3c.dom.Element;
 
-import walledin.game.Background;
 import walledin.game.Item;
-import walledin.game.Player;
 import walledin.game.entity.behaviors.BulletBehavior;
 import walledin.game.entity.behaviors.HealthBehavior;
 import walledin.game.entity.behaviors.HealthKitBehavior;
 import walledin.game.entity.behaviors.SpatialBehavior;
-import walledin.game.map.GameMap;
 import walledin.game.map.Tile;
 import walledin.math.Rectangle;
 import walledin.math.Vector2f;
@@ -143,8 +140,8 @@ public class ServerEntityFactory implements EntityFactory {
 						@Override
 						public Item create(final String itemName,
 								final Vector2f position, final Vector2f velocity) {
-							final Item hk = createItemInternal(itemName,
-									familyName, destRect, position, velocity);
+							final Item hk = new Item(familyName, itemName, texPart,
+									destRect, position, velocity);
 
 							// read extra data
 							final int hkStrength = XMLReader.getIntValue(el,
@@ -164,9 +161,12 @@ public class ServerEntityFactory implements EntityFactory {
 						@Override
 						public Item create(final String itemName,
 								final Vector2f position, final Vector2f velocity) {
-							// TODO: read custom information
-							return createItemInternal(itemName, familyName,
-									destRect, position, velocity);
+							return new Item(familyName, itemName, texPart, destRect,
+									position, velocity);
+							// TODO:
+							// read
+							// custom
+							// information
 						}
 					});
 		}
@@ -178,9 +178,10 @@ public class ServerEntityFactory implements EntityFactory {
 						@Override
 						public Item create(final String itemName,
 								final Vector2f position, final Vector2f velocity) {
-							final Item bl = createItemInternal(itemName,
-									familyName, destRect, position, velocity);
-							bl.addBehavior(new BulletBehavior(bl));
+							final Item bl = new Item(familyName, itemName, texPart,
+									destRect, position, velocity);
+								bl
+								.addBehavior(new BulletBehavior(bl));
 							return bl; // TODO:
 
 						}

@@ -14,11 +14,9 @@ import java.util.Set;
 
 import walledin.game.CollisionManager;
 import walledin.game.Item;
-import walledin.game.Player;
 import walledin.game.entity.Attribute;
 import walledin.game.entity.Entity;
 import walledin.game.entity.ServerEntityFactory;
-import walledin.game.map.GameMap;
 import walledin.game.map.GameMapIO;
 import walledin.game.map.GameMapIOXML;
 import walledin.math.Vector2f;

@@ -5,8 +5,12 @@ import java.util.List;
 
 import org.w3c.dom.Element;
 
+import walledin.game.EntityFactory;
+import walledin.game.EntityManager;
 import walledin.game.Item;
-import walledin.game.entity.EntityFactory;
+import walledin.game.entity.Attribute;
+import walledin.game.entity.Entity;
+import walledin.game.entity.behaviors.MapRenderBehavior;
 import walledin.math.Vector2f;
 import walledin.util.XMLReader;
 
@@ -85,7 +89,7 @@ public class GameMapIOXML implements GameMapIO {
 	 * @return Returns true on success and false on failure
 	 */
 	@Override
-	public GameMap readFromFile(final String filename) {
+	public Entity readFromFile(final String filename) {
 		final XMLReader reader = new XMLReader();
 
 		if (reader.open(filename)) {
@@ -95,7 +99,16 @@ public class GameMapIOXML implements GameMapIO {
 			final List<Item> items = parseItems(map);
 			final List<Tile> tiles = parseTiles(map);
 
-			final GameMap m = entityFactory.createGameMap(name, width, height, tiles, items);
+			final Entity m = new Entity("Map", name);
+			m.setAttribute(Attribute.WIDTH, width);
+			m.setAttribute(Attribute.HEIGHT, height);
+			m.setAttribute(Attribute.TILES, tiles);
+			m.setAttribute(Attribute.ITEM_LIST, items);
+			
+			m.addBehavior(new MapRenderBehavior(m, width, height, tiles));
+			
+			EntityManager.getInstance().add(m);
+			EntityManager.getInstance().add((List<Entity>)(ArrayList)items);
 
 			return m;
 		} else {
@@ -105,7 +118,7 @@ public class GameMapIOXML implements GameMapIO {
 	}
 
 	@Override
-	public boolean writeToFile(final GameMap map, final String filename) {
+	public boolean writeToFile(final Entity map, final String filename) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

@@ -2,10 +2,7 @@ package walledin.game.entity;
 
 import java.util.List;
 
-import walledin.game.Background;
 import walledin.game.Item;
-import walledin.game.Player;
-import walledin.game.map.GameMap;
 import walledin.game.map.Tile;
 import walledin.math.Vector2f;
 
