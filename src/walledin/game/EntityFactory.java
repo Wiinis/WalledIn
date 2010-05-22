@@ -14,6 +14,7 @@ import walledin.game.entity.behaviors.PlayerControlBehaviour;
 import walledin.game.entity.behaviors.PlayerRenderBehavior;
 import walledin.game.entity.behaviors.SpatialBehavior;
 import walledin.game.map.Tile;
+import walledin.math.Rectangle;
 
 public class EntityFactory {
 	Map<String, EntityConstructionFunction> entityContructionFunctions;
@@ -37,7 +38,7 @@ public class EntityFactory {
 		
 		return func.create(ent);
 	}
-	
+		
 	private Entity createPlayer(final Entity player) {
 		player.setAttribute(Attribute.ORIENTATION, 1); // start looking to
 		// the right
