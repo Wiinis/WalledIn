@@ -37,6 +37,14 @@ public class Entity {
 	public String getName() {
 		return name;
 	}
+	
+	/**
+	 * Get the family name
+	 * @return Family name
+	 */
+	public String getfFamilyName() {
+		return familyName;
+	}
 
 	/**
 	 * Adds a behavior to this class

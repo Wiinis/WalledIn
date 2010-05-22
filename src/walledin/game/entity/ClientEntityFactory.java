@@ -8,7 +8,6 @@ import org.w3c.dom.Element;
 
 import walledin.engine.TextureManager;
 import walledin.engine.TexturePartManager;
-import walledin.game.Item;
 import walledin.game.entity.behaviors.BackgroundRenderBehavior;
 import walledin.game.entity.behaviors.ItemRenderBehavior;
 import walledin.game.entity.behaviors.MapRenderBehavior;

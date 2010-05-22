@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import walledin.engine.math.Rectangle;
 import walledin.game.entity.Attribute;
 import walledin.game.entity.Entity;
 import walledin.game.entity.behaviors.BackgroundRenderBehavior;
@@ -75,7 +74,7 @@ public class EntityFactory {
 	 * @param items
 	 */
 	public Entity createGameMap(final String name, final int width,
-			final int height, final List<Tile> tiles, final List<Item> items) {
+			final int height, final List<Tile> tiles, final List<Entity> items) {
 		final Entity map = new Entity("Map", name);
 
 		map.setAttribute(Attribute.WIDTH, width);

@@ -6,14 +6,28 @@ import java.util.Map;
 
 import org.w3c.dom.Element;
 
+<<<<<<< HEAD:src/walledin/game/entity/ServerEntityFactory.java
+import walledin.game.Item;
+=======
+import walledin.engine.TextureManager;
+import walledin.engine.TexturePartManager;
+import walledin.engine.math.Rectangle;
+import walledin.engine.math.Vector2f;
+import walledin.game.entity.Attribute;
+import walledin.game.entity.Entity;
+>>>>>>> entitymanager:src/walledin/game/ItemFactory.java
 import walledin.game.entity.behaviors.BulletBehavior;
 import walledin.game.entity.behaviors.HealthBehavior;
 import walledin.game.entity.behaviors.HealthKitBehavior;
-import walledin.game.entity.behaviors.ItemRenderBehavior;
+<<<<<<< HEAD:src/walledin/game/entity/ServerEntityFactory.java
 import walledin.game.entity.behaviors.SpatialBehavior;
 import walledin.game.map.Tile;
 import walledin.math.Rectangle;
 import walledin.math.Vector2f;
+=======
+import walledin.game.entity.behaviors.ItemRenderBehavior;
+import walledin.game.entity.behaviors.SpatialBehavior;
+>>>>>>> entitymanager:src/walledin/game/ItemFactory.java
 import walledin.util.XMLReader;
 
 public class ServerEntityFactory implements EntityFactory {
@@ -22,7 +36,7 @@ public class ServerEntityFactory implements EntityFactory {
 	}
 
 	private interface ItemConstructionFunction {
-		Item create(String familyName, String itemName, Vector2f position, Vector2f velocity);
+		Item create(String itemName, Vector2f position, Vector2f velocity);
 	}
 
 	Map<String, ItemConstructionFunction> itemContructionFunctions;
@@ -75,6 +89,7 @@ public class ServerEntityFactory implements EntityFactory {
 		return item;
 	}
 
+<<<<<<< HEAD:src/walledin/game/entity/ServerEntityFactory.java
 	private Item createItemInternal(final String name, final String familyName,
 			final Rectangle destRect, final Vector2f position,
 			final Vector2f velocity) {
@@ -83,6 +98,10 @@ public class ServerEntityFactory implements EntityFactory {
 
 		item.setAttribute(Attribute.BOUNDING_RECT, destRect);
 		return item;
+=======
+	private interface ItemConstructionFunction {
+		Entity create(String familyName, String itemName, Vector2f position, Vector2f velocity);
+>>>>>>> entitymanager:src/walledin/game/ItemFactory.java
 	}
 
 	/**
@@ -131,8 +150,14 @@ public class ServerEntityFactory implements EntityFactory {
 	 *            Element in XML file which contains item specific information,
 	 *            like health kit strength or armor penetration value
 	 */
+<<<<<<< HEAD:src/walledin/game/entity/ServerEntityFactory.java
 	private void addFunction(final String familyName, final Rectangle destRect,
 			final Element el) {
+=======
+	private void addFunction(final String familyName, final String texPart,
+			final Rectangle destRect, final Element el) {
+		
+>>>>>>> entitymanager:src/walledin/game/ItemFactory.java
 		if (familyName.equals("healthkit")) {
 			itemContructionFunctions.put(familyName,
 					new ItemConstructionFunction() {
@@ -189,8 +214,13 @@ public class ServerEntityFactory implements EntityFactory {
 							
 								bl
 								.addBehavior(new BulletBehavior(bl));
+<<<<<<< HEAD:src/walledin/game/entity/ServerEntityFactory.java
 							return bl; // TODO:
 
+=======
+							return bl;
+							
+>>>>>>> entitymanager:src/walledin/game/ItemFactory.java
 						}
 					});
 		}
@@ -222,6 +252,8 @@ public class ServerEntityFactory implements EntityFactory {
 		}
 		return false;
 	}
+<<<<<<< HEAD:src/walledin/game/entity/ServerEntityFactory.java
+=======
 
 	/**
 	 * Creates a new item of a given family.
@@ -243,4 +275,5 @@ public class ServerEntityFactory implements EntityFactory {
 
 		return itemContructionFunctions.get(familyName).create(familyName, itemName, position, velocity);
 	}
+>>>>>>> entitymanager:src/walledin/game/ItemFactory.java
 }

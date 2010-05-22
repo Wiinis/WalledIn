@@ -8,7 +8,9 @@ import walledin.engine.RenderListener;
 import walledin.engine.Renderer;
 import walledin.engine.TextureManager;
 import walledin.engine.TexturePartManager;
-import walledin.game.EntityManager;
+import walledin.game.CollisionManager;
+import walledin.game.DrawOrderManager;
+import walledin.game.Item;
 import walledin.game.entity.Attribute;
 import walledin.game.entity.ClientEntityFactory;
 import walledin.game.entity.Entity;
@@ -40,7 +42,11 @@ public class Client implements RenderListener {
 			Vector2f position = playerPosition.add(new Vector2f(or * 50.0f,
 					20.0f));
 			Vector2f velocity = new Vector2f(or * 400.0f, 0);
+<<<<<<< HEAD:src/walledin/network/Client.java
+			Item bullet = entityFactory.createItem("bullet", "bl0",
+=======
 			Entity bullet = ItemFactory.getInstance().create("bullet", "bl0",
+>>>>>>> entitymanager:src/walledin/game/Game.java
 					position, velocity);
 			
 			EntityManager.getInstance().add(bullet);

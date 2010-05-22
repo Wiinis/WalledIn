@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 
 import walledin.game.CollisionManager;
-import walledin.game.Item;
 import walledin.game.entity.Attribute;
 import walledin.game.entity.Entity;
 import walledin.game.entity.ServerEntityFactory;
